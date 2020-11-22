@@ -1,0 +1,123 @@
+// This code is provided to GeeksForGeeks by Debojyoti Mallick, Computer Science Engineering 
+// This is program of Priority Queue using Single Linked List.
+#include <stdio.h>
+#include <stdlib.h>
+struct node{ // Creating a structure with all the specifiactions what the node will contain
+	int data;
+	int priority;
+	struct node* right;
+};
+struct node* front; // Creating two pointers to the structure 
+struct node* rear;
+void insert() // Function to insert the nodes in the queue
+{
+	struct node* temp, *p;
+	temp= (struct node*) malloc(sizeof(struct node)); // Creating a new node
+	printf("\nEnter the data ::: ");
+	scanf("%d", &temp->data); // Taking the node data as input 
+	printf("\nEnter the Priority ::: ");
+	scanf("%d", &temp->priority); // Taking the node priority as input
+	temp->right =NULL;
+	if (front == NULL) // This block will execute if the node entered is the first node in the queue
+	{
+		front = temp;
+		rear = temp;
+	}
+	else if(front->priority > temp->priority) // This block will execute if the node entered has higher priority than the first node. (lower the no. entered means higher the priority)
+	{
+		temp->right = front;
+		front= temp;
+	}
+	else 
+	{
+		p= front;
+		if (rear->priority <= temp->priority) // This block will execute if the node entered has lower priority than the last node
+		{
+			rear->right = temp;
+			rear = temp;
+		}
+		else
+		{
+		while(p->right !=NULL && p->right->priority <= temp->priority) // This conditions checks exactly where to put the node according to the priority of the node entered and in the case 
+			p=p->right;												   // of two nos. having the same priority it will be entered as fisrt come first serve (the no. entered first will be 	
+		temp->right = p->right;											// treated as the no. with higher priority than the no. which was entered afterwards) 
+		p->right= temp;
+		}
+	}
+}
+int delete_q() // Function to delete nodes in the queue
+{
+	struct node* temp;
+	temp= front;
+	if(temp == NULL)
+	{
+		printf("The list is empty !!!!");
+		return 0;
+	}
+	else // Deletes the node in the basic FIFO order(in this case the no. with higher priority gets deleted first than the no. with lower priorities which we are allready sorting in the insert function) 
+	{
+		printf("\n%d having %d priority is deleted", temp->data , temp->priority);
+		front = front->right;
+		temp->right = NULL;
+		free(temp);
+	}
+}
+void display() // Function to display all the nodes that are present in the queue
+{
+	struct node* temp;
+	temp= front;
+	if(temp == NULL)
+		printf("\nThe queue is empty !!!");
+	else
+	{
+		while(temp !=NULL)
+		{
+			printf("%d : %d\t", temp->data, temp->priority);
+			temp = temp->right;
+		}
+	}
+}
+int length() // Function to know the no. of nodes the queue consists of
+{
+	int count=0;
+	struct node* temp;
+	temp= front;
+	while(temp != NULL)
+	{
+		count++ ;
+		temp= temp->right;
+	}
+	return count;
+}
+int main() // The main function
+{
+	front = NULL; 
+	rear = NULL;
+	int i,n,j,x;
+	while(1)
+	{
+		printf("Enter choice :: : \n 1- To enter data into the queue \n 2- To delete data from the queue \n 3- To display the queue \n 4- To check the length of the queue \n");
+		scanf("%d", &n);
+		switch(n) // Creating a menu driven code that will run as much as the end-user wants
+		{
+			case 1: insert();
+					printf("\nEntered the node successfully !!!");
+					break;
+			case 2: x=delete_q();
+					(x==1)?printf("\nDeleted successfully !!! "): printf("\nNothing is Deleted");
+					break;
+			case 3: display();
+					break;
+			case 4: x=length();
+					printf("\nThe length of the queue is : %d", x);
+					break;
+			default: printf("\nWrong Choice !! Please enter correctly !! ");
+		}
+		printf("\nEnter 1 to continue doing operations with stack and 0 to exit \n ");
+		scanf("%d",&j);
+		if(j==0)
+			break;
+	}
+}
+// Thanks.
+// If you have questions regarding the code you can mail me at debojyotimallick777@gmail.com  
